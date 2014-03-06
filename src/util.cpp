@@ -466,7 +466,7 @@ vector<unsigned char> ParseHex(const string& str)
 
 static void InterpretNegativeSetting(string name, map<string, string>& mapSettingsRet)
 {
-    // interpret -nofoo as -foo=0 (and -nofoo=0 as -foo=1) as long as -foo not set
+    // interpret -noFRIC as -FRIC=0 (and -noFRIC=0 as -FRIC=1) as long as -FRIC not set
     if (name.find("-no") == 0)
     {
         std::string positive("-");
@@ -510,7 +510,7 @@ void ParseParameters(int argc, const char* const argv[])
     {
         string name = entry.first;
 
-        //  interpret --foo as -foo (as long as both are not set)
+        //  interpret --FRIC as -FRIC (as long as both are not set)
         if (name.find("--") == 0)
         {
             std::string singleDash(name.begin()+1, name.end());
@@ -519,7 +519,7 @@ void ParseParameters(int argc, const char* const argv[])
             name = singleDash;
         }
 
-        // interpret -nofoo as -foo=0 (and -nofoo=0 as -foo=1) as long as -foo not set
+        // interpret -noFRIC as -FRIC=0 (and -noFRIC=0 as -FRIC=1) as long as -FRIC not set
         InterpretNegativeSetting(name, mapArgs);
     }
 }
@@ -936,7 +936,7 @@ static std::string FormatException(std::exception* pex, const char* pszThread)
     char pszModule[MAX_PATH] = "";
     GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
-    const char* pszModule = "foocoin";
+    const char* pszModule = "FreindsCoin";
 #endif
     if (pex)
         return strprintf(
@@ -975,7 +975,7 @@ boost::filesystem::path GetDefaultDataDir()
     // Windows < Vista: C:\Documents and Settings\Username\Application Data\FooCoin
     // Windows >= Vista: C:\Users\Username\AppData\Roaming\FooCoin
     // Mac: ~/Library/Application Support/FooCoin
-    // Unix: ~/.foocoin
+    // Unix: ~/.FreindsCoin
 #ifdef WIN32
     // Windows
     return GetSpecialFolderPath(CSIDL_APPDATA) / "FooCoin";
@@ -993,7 +993,7 @@ boost::filesystem::path GetDefaultDataDir()
     return pathRet / "FooCoin";
 #else
     // Unix
-    return pathRet / ".foocoin";
+    return pathRet / ".FreindsCoin";
 #endif
 #endif
 }
@@ -1035,7 +1035,7 @@ const boost::filesystem::path &GetDataDir(bool fNetSpecific)
 
 boost::filesystem::path GetConfigFile()
 {
-    boost::filesystem::path pathConfigFile(GetArg("-conf", "foocoin.conf"));
+    boost::filesystem::path pathConfigFile(GetArg("-conf", "FreindsCoin.conf"));
     if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir(false) / pathConfigFile;
     return pathConfigFile;
 }
@@ -1045,19 +1045,19 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good())
-        return; // No foocoin.conf file is OK
+        return; // No FreindsCoin.conf file is OK
 
     set<string> setOptions;
     setOptions.insert("*");
 
     for (boost::program_options::detail::config_file_iterator it(streamConfig, setOptions), end; it != end; ++it)
     {
-        // Don't overwrite existing settings so command line settings override foocoin.conf
+        // Don't overwrite existing settings so command line settings override FreindsCoin.conf
         string strKey = string("-") + it->string_key;
         if (mapSettingsRet.count(strKey) == 0)
         {
             mapSettingsRet[strKey] = it->value[0];
-            // interpret nofoo=1 as foo=0 (and nofoo=0 as foo=1) as long as foo not set)
+            // interpret noFRIC=1 as FRIC=0 (and noFRIC=0 as FRIC=1) as long as FRIC not set)
             InterpretNegativeSetting(strKey, mapSettingsRet);
         }
         mapMultiSettingsRet[strKey].push_back(it->value[0]);
@@ -1066,7 +1066,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 
 boost::filesystem::path GetPidFile()
 {
-    boost::filesystem::path pathPidFile(GetArg("-pid", "foocoin.pid"));
+    boost::filesystem::path pathPidFile(GetArg("-pid", "FreindsCoin.pid"));
     if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
     return pathPidFile;
 }

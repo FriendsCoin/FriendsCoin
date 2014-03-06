@@ -78,7 +78,7 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
 
 bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    if(uri.scheme() != QString("foocoin"))
+    if(uri.scheme() != QString("FreindsCoin"))
         return false;
 
     // check if the address is valid
@@ -130,11 +130,11 @@ bool parseBitcoinURI(QString uri, SendCoinsRecipient *out)
 {
     // Convert FooCoin:// to FooCoin:
     //
-    //    Cannot handle this later, because foocoin:// will cause Qt to see the part after // as host,
+    //    Cannot handle this later, because FreindsCoin:// will cause Qt to see the part after // as host,
     //    which will lowercase it (and thus invalidate the address).
-    if(uri.startsWith("foocoin://"))
+    if(uri.startsWith("FreindsCoin://"))
     {
-        uri.replace(0, 11, "foocoin:");
+        uri.replace(0, 11, "FreindsCoin:");
     }
     QUrl uriInstance(uri);
     return parseBitcoinURI(uriInstance, out);
@@ -185,7 +185,7 @@ QString getSaveFileName(QWidget *parent, const QString &caption,
     }
     QString result = QFileDialog::getSaveFileName(parent, caption, myDir, filter, &selectedFilter);
 
-    /* Extract first suffix from filter pattern "Description (*.foo)" or "Description (*.foo *.bar ...) */
+    /* Extract first suffix from filter pattern "Description (*.FRIC)" or "Description (*.FRIC *.bar ...) */
     QRegExp filter_re(".* \\(\\*\\.(.*)[ \\)]");
     QString selectedSuffix;
     if(filter_re.exactMatch(selectedFilter))
@@ -360,7 +360,7 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "foocoin.desktop";
+    return GetAutostartDir() / "FreindsCoin.desktop";
 }
 
 bool GetStartOnSystemStartup()
@@ -398,7 +398,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out|std::ios_base::trunc);
         if (!optionFile.good())
             return false;
-        // Write a foocoin.desktop file to the autostart directory:
+        // Write a FreindsCoin.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         optionFile << "Name=FooCoin\n";
@@ -422,10 +422,10 @@ bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
 HelpMessageBox::HelpMessageBox(QWidget *parent) :
     QMessageBox(parent)
 {
-    header = tr("foocoin-qt") + " " + tr("version") + " " +
+    header = tr("FreindsCoin-qt") + " " + tr("version") + " " +
         QString::fromStdString(FormatFullVersion()) + "\n\n" +
         tr("Usage:") + "\n" +
-        "  foocoin-qt [" + tr("command-line options") + "]                     " + "\n";
+        "  FreindsCoin-qt [" + tr("command-line options") + "]                     " + "\n";
 
     coreOptions = QString::fromStdString(HelpMessage());
 
@@ -434,7 +434,7 @@ HelpMessageBox::HelpMessageBox(QWidget *parent) :
         "  -min                   " + tr("Start minimized") + "\n" +
         "  -splash                " + tr("Show splash screen on startup (default: 1)") + "\n";
 
-    setWindowTitle(tr("foocoin-qt"));
+    setWindowTitle(tr("FreindsCoin-qt"));
     setTextFormat(Qt::PlainText);
     // setMinimumWidth is ignored for QMessageBox so put in nonbreaking spaces to make it wider.
     setText(header + QString(QChar(0x2003)).repeated(50));
